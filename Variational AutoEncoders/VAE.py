@@ -10,7 +10,7 @@ from torchvision.datasets import MNIST
 import torchvision.transforms as transforms
 
 class VAEConfig:
-    def __init__(self, batch_size=100, epochs=30, latent_dim=200, hidden_dim=400, lr=1e-3, x_dim=784, device=None):
+    def __init__(self, batch_size=32, epochs=100, latent_dim=200, hidden_dim=400, lr=1e-4, x_dim=784, device=None):
         self.batch_size = batch_size
         self.epochs = epochs
         self.latent_dim = latent_dim
