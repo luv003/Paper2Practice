@@ -110,24 +110,24 @@ class VAETrainer:
                 self.display_images(x, x_hat)
                 break
 
-    def display_images(self, original, reconstructed):
+    def display_images(self, original, reconstructed, idx=0):
         def show_image(x, idx):
             x = x.view(self.config.batch_size, 28, 28)
             plt.figure()
             plt.imshow(x[idx].cpu().numpy(), cmap='gray')
             plt.show()
 
-        show_image(original, idx=0)
-        show_image(reconstructed, idx=0)
-
+        show_image(original, idx)
+        show_image(reconstructed, idx)
+        
     def generate_images(self):
         self.model.eval()
         with torch.no_grad():
             noise = torch.randn(self.config.batch_size, self.config.latent_dim).to(self.config.device)
             generated_images = self.model.decoder(noise)
             save_image(generated_images.view(self.config.batch_size, 1, 28, 28), 'generated_images.png')
-            self.display_images(generated_images, idx=0)
-
+            self.display_images(generated_images, generated_images, idx=0)
+            
 
 def load_data(batch_size):
     transform = transforms.Compose([transforms.ToTensor()])
@@ -143,7 +143,7 @@ def load_data(batch_size):
 
 
 def main():
-    config = VAEConfig(batch_size=100, epochs=30, latent_dim=200, hidden_dim=400, lr=1e-3, x_dim=784)
+    config = VAEConfig(batch_size=32, epochs=100, latent_dim=200, hidden_dim=400, lr=1e-4, x_dim=784)
     train_loader, test_loader = load_data(config.batch_size)
 
     encoder = Encoder(input_dim=config.x_dim, hidden_dim=config.hidden_dim, latent_dim=config.latent_dim)
